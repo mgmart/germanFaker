@@ -25,6 +25,7 @@ type Person struct {
 	Salutation string
 	FirstName  string
 	LastName   string
+	Email      string
 }
 
 type Address struct {
@@ -94,10 +95,26 @@ func CustomGenerator() {
 		if salut.Salutation == "Graf" || salut.Salutation == "Gräfin" {
 			lastName = "von " + lastName
 		}
+
+		replacer := strings.NewReplacer(
+			"ä", "ae",
+			"ö", "oe",
+			"ü", "ue",
+			"Ä", "Ae",
+			"Ö", "Oe",
+			"Ü", "Ue",
+			"ß", "ss",
+			" ", "_",
+		)
+		cleanFirstName := strings.ToLower(replacer.Replace(firstName))
+		cleanLastName := strings.ToLower(replacer.Replace(lastName))
+		email := fmt.Sprintf("%s.%s@emailtest.net", cleanFirstName, cleanLastName)
+
 		ret := Person{
 			Salutation: salut.Salutation,
 			FirstName:  firstName,
 			LastName:   lastName,
+			Email:      email,
 		}
 		return ret, nil
 	})
